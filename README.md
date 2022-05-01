@@ -1,3 +1,2 @@
-# hello-world
-first repository.
+# Data-Synchronize, used for different computers.
 Svring for QianMo.
