@@ -1,78 +1,43 @@
-<?php 
-highlight_file(__FILE__);
-//显示文件内容
-function check_inner_ip($url) 
-{ 
-    $match_result=preg_match('/^(http|https)?:\/\/.*(\/)?.*$/',$url); 
-    #进行正则表达式格式检查
-    #要求以http或https开头，？表示匹配零次或一次
-    #':\/\/'匹配接在http后的://
-    #'.'匹配任意一个字符，'*'表示重复次数不限
-    #'(\/)?'匹配零次或一次/
-    #'$'表示结束
-    if (!$match_result) 
-    { 
-        die('url fomat error'); 
-        #格式不正确则退出
-    } 
-    try 
-    { 
-        $url_parse=parse_url($url); 
-        #把url分段存入数组
-    } 
-    catch(Exception $e) 
-    { 
-        die('url fomat error'); 
-        #出现任意异常类型，程序结束
-        return false; 
-        #无法传递的False波
-    } 
-    $hostname=$url_parse['host']; 
-    $ip=gethostbyname($hostname); 
-    #用域名获取地址
-    $int_ip=ip2long($ip); 
-    #ip地址转换为数字形式（'2'是谐音梗？）
-    return ip2long('127.0.0.0')>>24 == $int_ip>>24 || ip2long('10.0.0.0')>>24 == $int_ip>>24 || ip2long('172.16.0.0')>>20 == $int_ip>>20 || ip2long('192.168.0.0')>>16 == $int_ip>>16; 
-    #判断是否为私有地址，详见（2），'>>'表示比特位右移
-} 
+<?php
+#传值，变量名为'ctf'
+if (!isset($_GET["ctf"])) {
+    highlight_file(__FILE__);
+    die();
+}
 
-function safe_request_url($url) 
-{ 
-     
-    if (check_inner_ip($url)) 
-    { 
-        echo $url.' is inner ip'; 
-        #如果是私有地址，则显示此行
-    } 
-    else 
-    {
-        $ch = curl_init(); 
-        #初始化一个curl会话，详见（3）
-        curl_setopt($ch, CURLOPT_URL, $url); 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-        curl_setopt($ch, CURLOPT_HEADER, 0); 
-        #设置请求选项
-        $output = curl_exec($ch); 
-        #执行curl请求，返回到变量output
-        $result_info = curl_getinfo($ch); 
-        #curl_getinfo详见（1）
-        if ($result_info['redirect_url']) 
-        { 
-            safe_request_url($result_info['redirect_url']); 
-            #传入重定向的地址
-        } 
-        curl_close($ch); 
-        #关闭会话
-        var_dump($output); 
-        #显示flag
-    } 
-     
-} 
+#传入的值赋值给变量'ctf'
+if(isset($_GET["ctf"]))
+    $ctf = $_GET["ctf"];
 
-$url = $_GET['url']; 
-//接收变量url
-if(!empty($url)){ 
-    safe_request_url($url); 
-    #url非空的情况下，传入safe函数
-} 
-?>
+#当'ctf'的值为'upload'时，进入if语句内部
+if($ctf=="upload") {
+    #上传文件的大小不能超过1024*512字节
+    #为什么get方法上传的文件在postedFile里，NTR吗。
+    if ($_FILES['postedFile']['size'] > 1024*512) {
+        die("这么大个的东西你是想d我吗？");
+    }
+    #获取图片信息
+    $imageinfo = getimagesize($_FILES['postedFile']['tmp_name']);
+    #如果上传文件不是图片，则上传失败
+    if ($imageinfo === FALSE) {
+        die("如果不能好好传图片的话就还是不要来打扰我了");
+    }
+    #要求图片宽和高都为一个像素
+    if ($imageinfo[0] !== 1 && $imageinfo[1] !== 1) {
+        die("东西不能方方正正的话就很讨厌");
+    }
+    #解码上传的文件的原名称，十六进制字符串转中文字符
+    $fileName=urldecode($_FILES['postedFile']['name']);
+    #大小写不敏感的检测
+    if(stristr($fileName,"c") || stristr($fileName,"i") || stristr($fileName,"h") || stristr($fileName,"ph")) {
+        die("有些东西让你传上去的话那可不得了");
+    }
+    #mb_strtolower字符串转小写，拼在image/后面
+    $imagePath = "image/" . mb_strtolower($fileName);
+    #移动上传的文件到imagePath
+    if(move_uploaded_file($_FILES["postedFile"]["tmp_name"], $imagePath)) {
+        echo "upload success, image at $imagePath";
+    } else {
+        die("传都没有传上去");
+    }
+}

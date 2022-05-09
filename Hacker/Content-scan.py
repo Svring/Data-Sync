@@ -1,6 +1,6 @@
 import requests
 
-url = "http://webshell.node3.mrctf.fun/"
+url = "http://97f48ca0-90ac-452f-830b-71c5bd25d500.node4.buuoj.cn:81/example"
 headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36"
     }
@@ -11,7 +11,7 @@ def file(file1):
 
 def run():
 
-    run = file("dictionary.txt")
+    run = file("extra\\dictionary.txt")
 
     for i in run:
         cf = i.strip("\n")
@@ -25,6 +25,6 @@ def run():
             print("[+]" + str(cf) + "存在",file=f)
     return ""
 
-with open("result.txt",'w') as f:
+with open("extra\\result.txt",'w') as f:
     f.write(run())
     f.close()
