@@ -8,7 +8,7 @@ if (!isset($_GET["ctf"])) {
 if(isset($_GET["ctf"]))
     $ctf = $_GET["ctf"];
 
-
+#当'ctf'的值为'poc'时，执行解压程序
 if($ctf=="poc") {
     #初始化一个ZipArchive对象
     $zip = new \ZipArchive();
