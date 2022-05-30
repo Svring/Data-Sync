@@ -1,6 +1,5 @@
 import requests
-#什么都扫描不出来的扫描器
-url = "http://97f48ca0-90ac-452f-830b-71c5bd25d500.node4.buuoj.cn:81/example"
+url = "http://eci-2ze70snot90iraql25r2.cloudeci1.ichunqiu.com/"
 headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36"
     }
@@ -11,8 +10,8 @@ def file(file1):
 
 def run():
 
-    run = file("extra\\dictionary.txt")
-
+    run = file("extra\\PHP.txt")
+    #multiple dictionaries in extra
     for i in run:
         cf = i.strip("\n")
         URL = url + str(cf)

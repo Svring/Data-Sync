@@ -1,5 +1,5 @@
 import requests
-url1 = "url"
+url1 = "http://eci-2zegvqjy0fqh8eowzpon.cloudeci1.ichunqiu.com/"
 dir1 = ['web','website','backup','back','www','wwwroot','temp']
 final2 = ['tar','tar.gz','zip','rar','bak']
 
