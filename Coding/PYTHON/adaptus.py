@@ -103,9 +103,11 @@ def f2_btn2():
 #按钮功能：替换词组
 def f2_btn3():
     words = f2_text3.get('1.0', END).split()
+    print(words)
     text = f1_text.get('1.0', END)
     for word in words:
         pre, cur = word.split('-->')
+        print(pre, cur)
         text = re.sub(pre, cur, text)
     f1_text.delete('1.0', END)
     f1_text.insert('insert', text)
@@ -132,7 +134,19 @@ def f2_btn5():
 
 #按钮功能：替换词组后重新统计
 def f2_btn6():
-    f2_btn4()
+    f2_text1.delete('1.0', END)
+    words = jieba.lcut(f1_text.get('1.0', END))
+    counts = {}
+    for word in words:
+        if len(word) == 1:
+            continue
+        else:
+            counts[word] = counts.get(word, 0) + 1
+    # 按词频从高到低排序
+    counts = sorted(counts.items(), key = lambda x: x[1], reverse = True)
+    for i in range(10):
+        word, count = counts[i]
+        f2_text1.insert('insert', word + ' ' + str(count) + '\n')
 
 #标签:词频统计
 f2_label1 = Label(f2, text='词频统计结果', width=15)
