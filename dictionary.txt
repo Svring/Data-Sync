@@ -1,0 +1,7 @@
+index.php
+robots.txt
+flag
+flag.txt
+flag.php
+flag.phps
+index.html
